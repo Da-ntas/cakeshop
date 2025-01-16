@@ -1,11 +1,11 @@
-Project for order control of a Cake Shop__
+Project for order control of a Cake Shop  
 
-Backend (in progress) made using nodejs (typescript) with fastify and drizzle-orm__
-For database is being used postgres__
+Backend (in progress) made using nodejs (typescript) with fastify and drizzle-orm  
+For database is being used postgres  
 
-Frontend (pending) will be an app and an site:__
-* App will be made with flutter__
-* Site will be made with react__
+Frontend (pending) will be an app and an site:  
+* App will be made with flutter  
+* Site will be made with react  
 
 Steps to initialize project
 1. RUN: npm install

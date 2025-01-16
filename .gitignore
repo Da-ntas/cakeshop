@@ -1,0 +1,29 @@
+# Logs
+npm-debug.log*
+*.log
+
+# Dependency directories
+node_modules/
+package-lock.json
+
+# Environment variables
+.env
+.env.*.local
+
+# Build output
+dist/
+build/
+
+# TypeScript
+*.tsbuildinfo
+
+# Drizzle ORM
+drizzle/
+migrations/
+.migrations/
+
+# Drizzle Kit
+.drizzle-kit/
+
+# IDE-specific files
+.vscode/

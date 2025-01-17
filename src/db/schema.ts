@@ -7,5 +7,6 @@ export const user = pgTable('user', {
     nomUser: text("nomUser").notNull(),
     dscRoles: text("dscRoles").notNull().default("user"),
     flagInactive: boolean("flagInactive").notNull().default(false),
-    dtaCrated: timestamp('dtaCrated', { withTimezone: true }).notNull().defaultNow()
+    dtaCrated: timestamp('dtaCrated', { withTimezone: true }).notNull().defaultNow(),
+    dtaUpdated: timestamp('dtaUpdated', { withTimezone: true })
 })

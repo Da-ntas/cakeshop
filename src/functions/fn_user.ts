@@ -13,6 +13,15 @@ interface createUser {
     dscRoles: string,
 }
 
+interface UpdateUserInput {
+    codUser: number; // obrigatório, para identificar o registro
+    dscLogin?: string;
+    dscPassword?: string;
+    nomUser?: string;
+    dscRoles?: string;
+    flagInactive?: boolean;
+}
+
 export const userfn = {
     async getUser() {
         const users = await db
@@ -105,12 +114,23 @@ export const userfn = {
     },
     
     async updateUser({
-        codUser
-    }: codUserInterface) {
-        // nao sei como fazer o update, de forma dinamica
-
+        codUser,
+        ...fieldsToUpdate
+    }: UpdateUserInput) {
+        
+        const updated = await db
+            .update(user)
+            .set({
+                ...fieldsToUpdate,
+                dtaUpdated: new Date()
+            })
+            .where(
+                eq(user.codUser, codUser)
+            )
+            .returning();
+        
         return {
-            data: []
+            data: updated
         }
     },
 

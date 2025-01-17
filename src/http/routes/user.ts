@@ -51,13 +51,24 @@ export const userRoutes:FastifyPluginAsyncZod = async (app) => {
         schema: {
             params: z.object({
                 codUser: z.coerce.number().int().min(1)
+            }),
+            body: z.object({
+                dscLogin: z.string().min(4).max(50).optional(),
+                dscPassword: z.string().min(4).max(25).optional(),
+                nomUser: z.string().min(4).max(150).optional(),
+                dscRoles: z.string().optional(),
+                flagInactive: z.boolean().optional()
             })
         }
     }, async (request) => {
         const { codUser } = request.params;
+        const body = request.body;
 
-        const { data } = await userfn.updateUser({codUser});
+        if(Object.keys(body).length === 0) {
+            return {message: "Missing fields to update"};
+        }
 
+        const { data } = await userfn.updateUser({codUser, ...body});
 
         return data;
     });

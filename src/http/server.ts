@@ -5,8 +5,9 @@ import {
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod'
 import fastifyCors from '@fastify/cors'
-import { deleteUser, getUserById, getUsers, postUser, updateUser } from './routes/user';
-import { login, refreshToken } from './routes/login';
+import { userRoutes } from './routes/user';
+import { loginRoutes } from './routes/login';
+import { middlewareOnRequest } from './middleware';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -17,13 +18,10 @@ app.register(fastifyCors, {
   origin: '*',
 })
 
-app.register(getUsers)
-app.register(getUserById)
-app.register(postUser)
-app.register(updateUser)
-app.register(deleteUser)
-app.register(login)
-app.register(refreshToken)
+app.addHook('onRequest', middlewareOnRequest)
+
+app.register(userRoutes);
+app.register(loginRoutes);
 
 app
   .listen({

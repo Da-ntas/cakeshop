@@ -67,6 +67,10 @@ export const userRoutes:FastifyPluginAsyncZod = async (app) => {
         if(Object.keys(body).length === 0) {
             return {message: "Missing fields to update"};
         }
+        
+        if(body.dscPassword) {
+            body.dscPassword = hashPassword(body.dscPassword);
+        }
 
         const { data } = await userfn.updateUser({codUser, ...body});
 

@@ -1,5 +1,7 @@
 import bcrypt from "bcrypt";
 import dayjs from "dayjs";
+import { eq, type SQL } from "drizzle-orm";
+import type { PgTable } from "drizzle-orm/pg-core";
 
 const _secret = process.env.TOKEN_SECRET;
 const _defHeader = {
@@ -84,6 +86,21 @@ export function isTokenValid(token: string) {
     }
 
     return false;
+}
+
+export function generateGenericFilter(schema: PgTable, params?: object) {
+    const filters: SQL[] = [];
+    if(params) {
+        for (const [k, v] of Object.entries(params)) {
+            if (k && v && k in schema) {
+                // @ts-ignore
+                // do not know why it gives an error, and couldn't make it right, but its working anyway
+                filters.push(eq(schema[k as keyof typeof schema], v));
+            }
+        }
+    }
+
+    return filters;
 }
 
 function generateUUID() {

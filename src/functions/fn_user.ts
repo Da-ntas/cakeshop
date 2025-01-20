@@ -148,7 +148,3 @@ export const userfn = {
         };
     }
 }
-
-export async function getUser() {
-    
-}

@@ -28,7 +28,7 @@ interface DefaultPropsUpdate<T> {
 
 interface DefaultPropsDelete {
     schema: PgTable;
-    filters: Array<SQL>;
+    params: object
 }
 
 export const defaultQuery = {
@@ -103,8 +103,9 @@ export const defaultQuery = {
 
     async defaultDelete({
         schema,
-        filters
+        params
     }: DefaultPropsDelete) {
+        const filters: Array<SQL> = generateGenericFilter(schema, params);
         const [deletedRecord] = await db
             .delete(schema)
             .where(

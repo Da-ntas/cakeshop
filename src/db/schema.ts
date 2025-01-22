@@ -50,3 +50,23 @@ export const order = pgTable('order', {
     dtaToDeliver: timestamp('dtaToDeliver', {withTimezone: true}).notNull(),
     ...defaultColumnsIdentity
 })
+
+export const product = pgTable('product', {
+    codProduct: serial('codProduct').primaryKey(),
+    dscDescription: text('dscDescription').notNull(),
+    ...defaultColumnsIdentity
+})
+
+export const flavour = pgTable('flavour', {
+    codFlavour: serial('codFlavour').primaryKey(),
+    nomFlavour: text('dscDescription').notNull(),
+})
+
+export const orderItem = pgTable('orderItem', {
+    codOrderItem: serial('codOrderItem').primaryKey(),
+    codOrder: integer('codOrder').references(() => order.codOrder).notNull(),
+    codProduct: integer('codProduct').references(() => product.codProduct).notNull(),
+    codFlavour: varchar('codSize', { length: 6 }).references(() => flavour.codFlavour).notNull(),
+    dscDescription: text('dscDescription').notNull(),
+    ...defaultColumnsIdentity
+})

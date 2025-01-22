@@ -53,13 +53,14 @@ export const order = pgTable('order', {
 
 export const product = pgTable('product', {
     codProduct: serial('codProduct').primaryKey(),
+    nomPruduct: varchar('nomPruduct', { length: 50 }).notNull(),
     dscDescription: text('dscDescription').notNull(),
     ...defaultColumnsIdentity
 })
 
 export const flavour = pgTable('flavour', {
     codFlavour: serial('codFlavour').primaryKey(),
-    nomFlavour: text('dscDescription').notNull(),
+    nomFlavour: varchar('dscDescription', { length: 50 }).notNull(),
 })
 
 export const orderItem = pgTable('orderItem', {

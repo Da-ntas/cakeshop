@@ -67,7 +67,7 @@ export const orderItem = pgTable('orderItem', {
     codOrderItem: serial('codOrderItem').primaryKey(),
     codOrder: integer('codOrder').references(() => order.codOrder).notNull(),
     codProduct: integer('codProduct').references(() => product.codProduct).notNull(),
-    codFlavour: varchar('codSize', { length: 6 }).references(() => flavour.codFlavour).notNull(),
+    codFlavour: integer('codFlavour').references(() => flavour.codFlavour),
     dscDescription: text('dscDescription').notNull(),
     ...defaultColumnsIdentity
 })

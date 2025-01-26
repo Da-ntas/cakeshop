@@ -1,11 +1,13 @@
 import { db } from "../db";
-import type { PgTable, SelectedFields } from "drizzle-orm/pg-core";
+import type { PgTable, PgView as PView, SelectedFields } from "drizzle-orm/pg-core";
+import { PgView } from "drizzle-orm/pg-core";
 import { and, getTableColumns, type SQL } from "drizzle-orm";
 import { generateGenericFilter } from "../helper";
+import { ViewBaseConfig } from 'drizzle-orm'
 
-interface DefaultPropsGetAll<TSchema extends PgTable, TSelection extends SelectedFields> {
+interface DefaultPropsGetAll<TSchema extends PgTable, TSView extends PView, TSelection extends SelectedFields> {
     fieldsToSelect?: TSelection;
-    schema: TSchema;
+    schema: TSchema | TSView;
     params?: object;
 }
 
@@ -32,15 +34,22 @@ interface DefaultPropsDelete {
 }
 
 export const defaultQuery = {
-    async defaultGetAll<TSchema extends PgTable, TSelection extends SelectedFields>({
+    async defaultGetAll<TSchema extends PgTable, TSView extends PView, TSelection extends SelectedFields>({
         schema,
         fieldsToSelect,
         params,
-    }: DefaultPropsGetAll<TSchema, TSelection>) {
+    }: DefaultPropsGetAll<TSchema, TSView, TSelection>) {
         const filters: Array<SQL> = generateGenericFilter(schema, params);
 
         const records = await db
-            .select(!fieldsToSelect ? getTableColumns(schema) : fieldsToSelect)
+            .select(!fieldsToSelect ? 
+                    schema instanceof PgView
+                    //@ts-ignore
+                    ? schema[ViewBaseConfig].selectedFields
+                    : getTableColumns(schema) 
+                : 
+                fieldsToSelect
+            )
             .from(schema)
             .where(
                 and (

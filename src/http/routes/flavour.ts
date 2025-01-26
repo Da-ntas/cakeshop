@@ -7,7 +7,7 @@ export const flavourRoutes:FastifyPluginAsyncZod = async (app) => {
     app.get("/flavour", {
         schema: {
             querystring: z.object({
-                codFlavour: z.number().optional(),
+                codFlavour: z.coerce.number().optional(),
                 nomFlavour: z.string().min(2).max(50).optional()
             }).optional()
         }
@@ -26,7 +26,7 @@ export const flavourRoutes:FastifyPluginAsyncZod = async (app) => {
     app.get("/flavour/:codFlavour", {
         schema: {
             params: z.object({
-                codFlavour: z.number()
+                codFlavour: z.coerce.number()
             }).required(),
         }
     }, async (request) => {
@@ -43,7 +43,7 @@ export const flavourRoutes:FastifyPluginAsyncZod = async (app) => {
     app.post("/flavour", {
         schema: {
             body: z.object({
-                codFlavour: z.number(),
+                codFlavour: z.coerce.number(),
                 nomFlavour: z.string().min(2).max(50),
             })
         }
@@ -63,7 +63,7 @@ export const flavourRoutes:FastifyPluginAsyncZod = async (app) => {
     app.put("/flavour/:codFlavour", {
         schema: {
             params: z.object({
-                codFlavour: z.number()
+                codFlavour: z.coerce.number()
             }).required(),
             body: z.object({
                 codFlavour: z.number().optional(),
@@ -90,7 +90,7 @@ export const flavourRoutes:FastifyPluginAsyncZod = async (app) => {
     app.delete("/flavour/:codFlavour", {
         schema: {
             params: z.object({
-                codFlavour: z.number()
+                codFlavour: z.coerce.number()
             })
         }
     }, async (request) => {

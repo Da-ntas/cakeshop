@@ -11,6 +11,7 @@ import { middlewareOnRequest } from './middleware';
 import { statusRoutes } from './routes/status';
 import { productRoutes } from './routes/product';
 import { flavourRoutes } from './routes/flavour';
+import { orderRoutes } from './routes/order';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -28,6 +29,7 @@ app.register(loginRoutes);
 app.register(statusRoutes);
 app.register(productRoutes);
 app.register(flavourRoutes);
+app.register(orderRoutes);
 
 app
   .listen({

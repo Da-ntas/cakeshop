@@ -7,7 +7,7 @@ export const productRoutes:FastifyPluginAsyncZod = async (app) => {
     app.get("/product", {
         schema: {
             querystring: z.object({
-                codProduct: z.number().optional(),
+                codProduct: z.coerce.number().optional(),
                 nomProduct: z.string().min(2).max(50).optional(),
                 dscDescription: z.string().optional(),
             }).optional()
@@ -27,7 +27,7 @@ export const productRoutes:FastifyPluginAsyncZod = async (app) => {
     app.get("/product/:codProduct", {
         schema: {
             params: z.object({
-                codProduct: z.number()
+                codProduct: z.coerce.number(),
             }).required(),
         }
     }, async (request) => {
@@ -44,7 +44,7 @@ export const productRoutes:FastifyPluginAsyncZod = async (app) => {
     app.post("/product", {
         schema: {
             body: z.object({
-                codProduct: z.number(),
+                codProduct: z.coerce.number(),
                 nomProduct: z.string().min(2).max(50),
                 dscDescription: z.string().optional(),
             })
@@ -65,7 +65,7 @@ export const productRoutes:FastifyPluginAsyncZod = async (app) => {
     app.put("/product/:codProduct", {
         schema: {
             params: z.object({
-                codProduct: z.number()
+                codProduct: z.coerce.number(),
             }).required(),
             body: z.object({
                 codProduct: z.number().optional(),

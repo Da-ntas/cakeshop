@@ -30,15 +30,7 @@ export const paymentType = pgTable('paymentType', {
     nomPaymentType: text('nomPaymentType').notNull().unique(),
     flagParcel: boolean('flagParcel').notNull().default(false),
     vlrQtdMaxParcel: integer('vlrQtdMaxParcel'),
-    fees: numeric('fees', {precision: 3, scale: 3}).notNull(),
-    ...defaultColumnsIdentity
-})
-
-export const orderPayment = pgTable('orderPayment', {
-    codOrderPayment: serial('codOrderPayment').primaryKey(),
-    codPaymentType: varchar('codPaymentType', { length: 6 }).references(() => paymentType.codPaymentType).notNull(),
-    qtdParcels: integer('qtdParcels'),
-    vlrTotalOrder: numeric('vlrTotalOrder', {precision: 15, scale: 3}).notNull(),
+    fees: numeric('fees', {precision: 6, scale: 3}).notNull(),
     ...defaultColumnsIdentity
 })
 
@@ -46,8 +38,16 @@ export const order = pgTable('order', {
     codOrder: serial('codOrder').primaryKey(),
     codUser: integer('codUser').references(() => user.codUser).notNull(),
     codStatus: varchar('codStatus', {length: 8}).references(() => status.codStatus).notNull(),
-    codOrderPayment: integer('codOrderPayment').references(() => orderPayment.codOrderPayment).notNull(),
     dtaToDeliver: timestamp('dtaToDeliver', {withTimezone: true}).notNull(),
+    ...defaultColumnsIdentity
+})
+
+export const orderPayment = pgTable('orderPayment', {
+    codOrderPayment: serial('codOrderPayment').primaryKey(),
+    codPaymentType: varchar('codPaymentType', { length: 6 }).references(() => paymentType.codPaymentType).notNull(),
+    codOrder: integer('codOrder').references(() => order.codOrder).notNull(),
+    qtdParcels: integer('qtdParcels'),
+    vlrTotalOrder: numeric('vlrTotalOrder', {precision: 15, scale: 3}).notNull(),
     ...defaultColumnsIdentity
 })
 
@@ -60,7 +60,7 @@ export const product = pgTable('product', {
 
 export const flavour = pgTable('flavour', {
     codFlavour: serial('codFlavour').primaryKey(),
-    nomFlavour: varchar('dscDescription', { length: 50 }).notNull(),
+    nomFlavour: varchar('nomFlavour', { length: 50 }).notNull(),
 })
 
 export const orderItem = pgTable('orderItem', {

@@ -10,7 +10,7 @@ export const vw_order = pgView("vw_order").as((qb) => {
             nomUser: user.nomUser,
             codStatus: order.codStatus,
             nomStatus: status.nomStatus,
-            codOrderPayment: order.codOrderPayment,
+            codOrderPayment: orderPayment.codOrderPayment,
             qtdParcels: orderPayment.qtdParcels,
             vlrTotalOrder: orderPayment.vlrTotalOrder,
             nomPaymentType: paymentType.nomPaymentType,
@@ -24,7 +24,7 @@ export const vw_order = pgView("vw_order").as((qb) => {
         .leftJoin(user, eq(user.codUser, order.codUser))
         .leftJoin(status, eq(status.codStatus, order.codStatus))
         .leftJoin(orderItem, eq(order.codOrder, orderItem.codOrder))
-        .leftJoin(orderPayment, eq(order.codOrderPayment, orderPayment.codOrderPayment))
+        .leftJoin(orderPayment, eq(order.codOrder, orderPayment.codOrder))
         .leftJoin(paymentType, eq(paymentType.codPaymentType, orderPayment.codPaymentType))
         .groupBy(
             order.codOrder,
@@ -32,7 +32,7 @@ export const vw_order = pgView("vw_order").as((qb) => {
             user.nomUser,
             order.codStatus,
             status.nomStatus,
-            order.codOrderPayment,
+            orderPayment.codOrderPayment,
             orderPayment.qtdParcels,
             orderPayment.vlrTotalOrder,
             paymentType.nomPaymentType,

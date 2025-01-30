@@ -63,7 +63,7 @@ export const defaultQuery = {
     async defaultGetWithFilters<TSchema extends PgTable, TSelection extends SelectedFields>({
         fieldsToSelect,
         schema,
-        params
+        params,
     }: DefaultPropsGetById<TSchema, TSelection>) {
         const filters: Array<SQL> = generateGenericFilter(schema, params);
         const record = await db
@@ -81,23 +81,27 @@ export const defaultQuery = {
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     async defaultCreate<T extends Record<string, any>>({
         schema,
-        data
-    }: DefaultPropsCreate<T>) {
-        const [newRecord] = await db
+        data,
+        tx
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    }: DefaultPropsCreate<T> & { tx?: any }) {
+        const [newRecord] = await (tx ?? db) // Usa `tx` se estiver disponível, senão usa `db`
             .insert(schema)
             .values(data)
             .returning();
-
+    
         return { data: newRecord };
     },
 
     async defaultUpdate<T>({
         schema,
         data,
-        params
-    }: DefaultPropsUpdate<T>) {
+        params,
+        tx
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    }: DefaultPropsUpdate<T> & { tx?: any }) {
         const filters: Array<SQL> = generateGenericFilter(schema, params);
-        const [updatedRecord] = await db
+        const [updatedRecord] = await (tx ?? db)
             .update(schema)
             .set(data)
             .where(
@@ -112,10 +116,12 @@ export const defaultQuery = {
 
     async defaultDelete({
         schema,
-        params
-    }: DefaultPropsDelete) {
+        params,
+        tx
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    }: DefaultPropsDelete & { tx?: any }) {
         const filters: Array<SQL> = generateGenericFilter(schema, params);
-        const [deletedRecord] = await db
+        const [deletedRecord] = await (tx ?? db)
             .delete(schema)
             .where(
                 and (
